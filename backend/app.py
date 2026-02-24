@@ -1,5 +1,4 @@
 import csv
-import sqlite3
 
 # ====== CSV PARSING ======
 # removes all the parenthesis and unwanted symbols for neg pnl
@@ -28,6 +27,3 @@ with open('./test_data.csv', 'r',) as performance:
     up_dt.append(row)
 print(up_dt)
 
-# ====== CREATING A DATABASE ======
-conn = sqlite3.connect('trades.db')
-trades = conn.cursor()
