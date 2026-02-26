@@ -1,29 +1,32 @@
-import csv
+import csv, sqlite3
+import pandas as pd
 
-# ====== CSV PARSING ======
-# removes all the parenthesis and unwanted symbols for neg pnl
-def parseAmount(s):
-    s = s.strip()
-    neg = "(" in s and ")" in s
-    s = s.replace("$", "").replace("(", "").replace(")", "").replace(",", "")
-    val = float(s)
-    return -val if neg else val
 
-with open('./test_data.csv', 'r',) as performance:
-    dt = csv.DictReader(performance)
+dt = pd.read_csv('test_data.csv')
+# print(dt['pnl'])
 
-# Normalizes the headers for clarity
-    up_dt = []
-    for r in dt:
-        print(r)
-        row = {'Symbol': r['symbol'],
-           'Contrace Amount': r['_priceFormat'],
-           'Price Format Type': r['_priceFormatType'],
-           'Tick Size': r['_tickSize'],
-           'pnl': parseAmount(r['pnl']),
-           'Bought Time': r['boughtTimestamp'],
-           'Sold Time': r['soldTimestamp'],
-           'Duration': r['duration']}
-    up_dt.append(row)
-print(up_dt)
+# if contains "(" then it is a negative
+is_neg = dt["pnl"].str.contains("(", regex=False)
 
+# Removed the parenthesis and converted into float
+dt['pnl'] = (dt['pnl']
+             .str.replace('(', '', regex=False)
+             .str.replace('$', '', regex=False)
+             .str.replace(')','',regex=False)
+             .astype(float))
+
+#applies negative sign
+dt.loc[is_neg, "pnl"] *= -1
+
+
+dt = dt.rename(columns={'symbol': 'symbol',
+                        'boughtTimestamp': 'bought time',
+                        'soldTimestamp': 'sold time',
+                        })
+
+# print(dt)
+
+connection = sqlite3.connect("trades.db")
+
+dt.to_sql("trades", connection, if_exists='append', index=False)
+connection.close()
