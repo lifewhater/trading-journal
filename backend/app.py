@@ -26,6 +26,5 @@ def stats():
         'pnl' : total
     })
 
-
 if app == "__main__":
     app.run(debug=True)
