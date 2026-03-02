@@ -1,5 +1,7 @@
 # Handles flask api endpoints
-import flask, csv_format as format, db_connection as connection
+from flask import Flask, jsonify
+import csv_format as format
+from db_connection import connection_to_flask
 
 """
 TODO: 
@@ -9,3 +11,21 @@ TODO:
 - FIX DATE AND TIME FORMATTING (yyyy-mm-dd)
 - Get the stats: AVG, SUM, EOD profit, 
 """
+
+app = Flask(__name__)
+
+connection = connection_to_flask()
+
+@app.route('/stats')
+def stats():
+    cursor = connection.cursor()
+    total = cursor.execute('SELECT SUM(pnl) FROM journal').fetchone()[0]
+
+    cursor.close()
+    return jsonify({
+        'pnl' : total
+    })
+
+
+if app == "__main__":
+    app.run(debug=True)

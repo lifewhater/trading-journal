@@ -1,7 +1,6 @@
 import sqlite3
 import csv_format as format
 
-connection = sqlite3.connect("trades.db")
-format.df.to_sql("journal", connection, if_exists='append',index=False)
-
-connection.close()
+def connection_to_flask():
+    connection = sqlite3.connect("backend/trades.db")
+    return(connection)
