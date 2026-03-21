@@ -23,7 +23,6 @@ def stats():
     total = cursor.execute('SELECT SUM(pnl) FROM journal').fetchone()[0]
     table = cursor.execute('SELECT * FROM journal').fetchall()
 
-
     cursor.close()
     return jsonify({
         'pnl' : total,
