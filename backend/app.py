@@ -17,11 +17,16 @@ app = Flask(__name__)
 connection = connection_to_flask()
 format.load_to_db(connection)
 
-@app.route('/stats')
+@app.route('/')
 def stats():
     cursor = connection.cursor()
+    # Cumlative PNL
     total = cursor.execute('SELECT SUM(pnl) FROM journal').fetchone()[0]
-    table = cursor.execute('SELECT * FROM journal').fetchall()
+
+    # Will add per day pnl view
+    
+    # Groups by per date and in ascending order
+    table = cursor.execute('SELECT * FROM journal GROUP BY entry_time ORDER BY entry_time ASC').fetchall()
 
     cursor.close()
     return jsonify({
