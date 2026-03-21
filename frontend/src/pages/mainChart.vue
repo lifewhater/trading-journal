@@ -25,30 +25,30 @@ onMounted(async () => {
         height: chartContainer.value?.clientWidth,
         layout:{
             background: {
-                color: '#353535'
+                color: '#0f172a'
             },
-            textColor: '#FFFFFF'
+            textColor: '#cbd5e1'
             
         },
         autoSize: true,
         grid: {
-            vertLines: { visible: false},
-            horzLines: { visible: false}
+            vertLines: { color: 'rgba(148, 163, 184, 0.08)' },
+            horzLines: { color: 'rgba(148, 163, 184, 0.08)' }
         }
     })
 
     // the customizations for the chart
     const baseline = chart.addSeries(BaselineSeries, {
         baseValue: { type: 'price', price: 25 }, 
-        topLineColor: 'rgb(58 116 203)', 
-        bottomLineColor: 'rgb(255 255 255)',
-        topFillColor1: 'rgb(97 123 252)',
-        topFillColor2: 'rgba(255 255 255 / 0)',
-        bottomFillColor1: 'rgba(186 186 186 / 0)',
-        bottomFillColor2: 'rgb(255 255 255)',
+          topLineColor: '#22d3ee',
+          bottomLineColor: '#fb7185',
+          topFillColor1: 'rgba(34, 211, 238, 0.45)',
+          topFillColor2: 'rgba(34, 211, 238, 0.04)',
+          bottomFillColor1: 'rgba(251, 113, 133, 0.06)',
+          bottomFillColor2: 'rgba(251, 113, 133, 0.40)',
 
   baseLineVisible: true,
-  baseLineColor: 'rgba(255, 255, 255, 0.6)',
+      baseLineColor: 'rgba(226, 232, 240, 0.45)',
   baseLineWidth: 2,
 
     })
