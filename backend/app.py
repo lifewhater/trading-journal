@@ -8,8 +8,8 @@ TODO:
 - Need to create schema where each contract is unique and no duplicates allowed
  if same csv uploaded using ID
 - Handle uploading through frontend and automating importing csv to sqlite
-- FIX DATE AND TIME FORMATTING (yyyy-mm-dd)
-- Get the stats: AVG, SUM, EOD profit (done through sql call from frontend)
+- [DONE] FIX DATE AND TIME FORMATTING (yyyy-mm-dd)
+- [DONE] Get the stats: AVG, SUM, EOD profit (done through sql call from frontend)
 """
 
 app = Flask(__name__)
@@ -26,10 +26,9 @@ def stats():
     # Will add per day pnl view
     
     # Groups by per date and in ascending order
-    table = cursor.execute('SELECT * FROM journal GROUP BY entry_time ORDER BY entry_time ASC').fetchall()
+    cursor.execute('SELECT entry_time, symbol, pnl, size FROM journal GROUP BY entry_time ORDER BY entry_time ASC').fetchall()
 
     cursor.close()
     return jsonify({
         'pnl' : total,
-        'journal' : table 
     })
