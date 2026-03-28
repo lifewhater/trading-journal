@@ -1,5 +1,6 @@
 # Handles flask api endpoints
 from flask import Flask, jsonify
+from flask_cors import CORS  # type: ignore
 import csv_format as format
 from db_connection import connection_to_flask
 
@@ -13,6 +14,7 @@ TODO:
 """
 
 app = Flask(__name__)
+CORS(app)
 
 connection = connection_to_flask()
 format.load_to_db(connection)
@@ -26,9 +28,11 @@ def stats():
     # Will add per day pnl view
     
     # Groups by per date and in ascending order
-    cursor.execute('SELECT entry_time, symbol, pnl, size FROM journal GROUP BY entry_time ORDER BY entry_time ASC').fetchall()
+    daily_pnl = [dict(row) for row in cursor.execute('SELECT entry_time as date, symbol, pnl, size FROM journal GROUP BY date ORDER BY date ASC').fetchall()]
 
     cursor.close()
+
     return jsonify({
         'pnl' : total,
+        'daily_pnl' : daily_pnl,
     })

@@ -15,6 +15,7 @@ const chartContainer = ref<HTMLDivElement | null>(null)
 onMounted(async () => {
     // makes sure to wait updating the DOM and then run the code
     await nextTick()
+    
 
     console.log(chartContainer.value?.clientHeight, chartContainer.value?.clientWidth)
 
@@ -39,7 +40,7 @@ onMounted(async () => {
 
     // the customizations for the chart
     const baseline = chart.addSeries(BaselineSeries, {
-        baseValue: { type: 'price', price: 25 }, 
+        baseValue: { type: 'price', price: 0 }, 
           topLineColor: '#22d3ee',
           bottomLineColor: '#fb7185',
           topFillColor1: 'rgba(34, 211, 238, 0.45)',
@@ -53,22 +54,17 @@ onMounted(async () => {
 
     })
 
-    const data = [
-        { value: 1, time: '2019-04-11' }, 
-        { value: 8, time: '2019-04-12' }, 
-        { value: 10, time: '2019-04-13' }, 
-        { value: 20, time: '2019-04-14' }, 
-        { value: 3, time: '2019-04-15' }, 
-        { value: 43, time: '2019-04-16' }, 
-        { value: 41, time: '2019-04-17' }, 
-        { value: 43, time: '2019-04-18' }, 
-        { value: 56, time: '2019-04-19' }, 
-        { value: 46, time: '2019-04-20' }
-    ]
+    const backend = await fetch('http://localhost:5000/')
+    const json = await backend.json()
+    let running = 0
+    const data = json.daily_pnl.map((row: {date: string, pnl: number}) => {
+        running += row.pnl
+        return { time: row.date, value: running }
+    })
+
     baseline.setData(data)
 
-    // fits the time and content of the chart
-    chart.timeScale().fitContent()
+    
 })
 
 </script>

@@ -2,6 +2,7 @@ import sqlite3
 
 def connection_to_flask():
     connection = sqlite3.connect("trades.db", check_same_thread=False)
+    connection.row_factory = sqlite3.Row
     journal_query = """
     CREATE TABLE IF NOT EXISTS journal (
     symbol TEXT,
