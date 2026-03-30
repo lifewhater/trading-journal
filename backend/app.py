@@ -28,7 +28,7 @@ def stats():
     # Will add per day pnl view
     
     # Groups by per date and in ascending order
-    daily_pnl = [dict(row) for row in cursor.execute('SELECT entry_time as date, symbol, pnl, size FROM journal GROUP BY date ORDER BY date ASC').fetchall()]
+    daily_pnl = [dict(row) for row in cursor.execute('SELECT entry_time as date, symbol, SUM(pnl) as pnl, SUM(size) as size FROM journal GROUP BY date ORDER BY date ASC').fetchall()]
 
     cursor.close()
 
